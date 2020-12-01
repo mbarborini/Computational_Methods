@@ -41,6 +41,8 @@ def sqrTrialWaveFunction( x,w ):
 
 # Number of MC sampling to integrate.    
 n_sample = 100000
+# Number of thermalization steps for Metropolis
+n_therm  = 1000
 
 # Define arrays of the mean values and standard error of the integral for 
 # different values of the error dw
@@ -56,6 +58,12 @@ for dw in dw_list:
 
     # Iterate for the number of samples.
     x = 0.0
+
+    # Thermalization (or equilibration steps)
+    for i in range(n_therm):
+       x = mh.metropolisHastings( x, (w+dw), sqrTrialWaveFunction, mh.uniTransProb )
+
+    # Start sampling for local energy
     for i in range(n_sample):
        x = mh.metropolisHastings( x, (w+dw), sqrTrialWaveFunction, mh.uniTransProb )
        e_loc = locEneGS(x,w,dw)

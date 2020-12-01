@@ -1,9 +1,29 @@
+"""
+Created on Tue Nov 17 15:10:50 2020
+
+@author: Matteo Barborini
+@e-mail: matteo.barborini@uni.lu
+
+ Testing Box-Muller transform to sample a general Gaussian distribution
+ of mean value m and standard deviation sigma
+
+    p(x) = 1 / sqrt(2 pi sigma^2 ) * e^{-(x-m)^2 / (2 sigma^2)}
+
+Box-Muller transform
+    x1, x2 random numbers in [0,1]
+    
+    y1 = sqrt(-2 log(x1)) cos(2 pi x2)
+    y2 = sqrt(-2 log(x1)) sin(2 pi x2)
+    
+    y1 and y2 distributed according to a Gaussian with zero mean value
+              and unitary variance
+"""
 # https://numpy.org/doc/stable/
 import numpy as np
 # https://matplotlib.org/contents.html
 import matplotlib.pyplot as plot
 
-# Box-Muller transform
+# Simple Box-Muller transform
 def boxMuller(x1,x2):
     y1 = np.sqrt(-2.0*np.log(x1))*np.cos(2.0*np.pi*x2)
     y2 = np.sqrt(-2.0*np.log(x1))*np.sin(2.0*np.pi*x2)
@@ -13,6 +33,7 @@ def boxMuller(x1,x2):
 mean = -2.0
 sigma = 3.0
 
+# Number of samples
 n_samples = 100000
 
 # Standard distribution

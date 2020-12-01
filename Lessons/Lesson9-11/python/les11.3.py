@@ -47,9 +47,10 @@ def locEneGS(x,w,dw):
 def sqrTrialWaveFunction( x,w ):
     return np.exp(-(w)*x**2)
 
-
 # Number of MC sampling to integrate.    
 n_sample = 100000
+# Number of thermalization steps for Metropolis
+n_therm  = 1000
 
 # Error in the frequency
 dw = 0.1
@@ -62,11 +63,16 @@ mh.D = 0.5
 
 # Iterate for the number of samples.
 x = 0.0
+# Thermalization (or equilibration steps)
+for i in range(n_therm):
+    x = mh.metropolisHastings( x, (w+dw), sqrTrialWaveFunction, mh.uniTransProb )
+
+# Start sampling for local energy
 for i in range(n_sample):
-   x = mh.metropolisHastings( x, (w+dw), sqrTrialWaveFunction, mh.uniTransProb )
-   e_loc = locEneGS(x,w,dw)
-   values_e_loc.append(e_loc)
-    
+    x = mh.metropolisHastings( x, (w+dw), sqrTrialWaveFunction, mh.uniTransProb )
+    e_loc = locEneGS(x,w,dw)
+    values_e_loc.append(e_loc)
+   
 # Compute Mean value and Std err.
 mean_value_e_loc, std_err_e_loc = me.meanAndStdErr(values_e_loc)
 

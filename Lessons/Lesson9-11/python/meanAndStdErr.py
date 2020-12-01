@@ -1,15 +1,36 @@
-import numpy as np
 """
 Created on Tue Nov 24 11:25:06 2020
 
 @author: Matteo Barboini
 @e-mail: matteo.barborini@gmail.com
 
-     Compute the mean value and standard error of a series
+ - Compute the mean value and standard error of a series
+   mean, st_err = meanAndStdErr( a )
+
+ - Compute autocorrelation function
+   rho_k = autoCorrFunc(a, T_max)
+
+ - Compute the reblocked array
+   reblocked_a = reblock(a, T_block)
+   
 """
+# https://numpy.org/doc/stable/
+import numpy as np
 
 # Mean value and standard error
 def meanAndStdErr( a ):
+    n_elements = np.size(a)
+    
+    # Mean Value and Variance
+    mean, variance = meanAndVar(a)
+
+    # Standard error 
+    std_err = np.sqrt(variance / float(n_elements))
+    
+    return mean, std_err
+
+# Mean value and standard error
+def meanAndVar( a ):
     n_elements = np.size(a)
     
     # Mean Value
@@ -18,10 +39,8 @@ def meanAndStdErr( a ):
     # Variance
     variance = np.sum((a[:]-mean)**2) / float(n_elements-1)
 
-    # Standard error 
-    std_err = np.sqrt(variance / float(n_elements))
-    
-    return mean, std_err
+    return mean, variance
+
 
 # Autocorrelation function for time <= T_max
 def autoCorrFunc( a, T_max=100 ):
